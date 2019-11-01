@@ -25,13 +25,15 @@ name: publish github pages
 steps:
   - name: publish
     image: plugins/github-release
-    pages_directory: https://github.com/Lediya/TestApp/
+    pages_directory: https://github.com/Lediya/SampleTest/
     settings:
       username:
         from_secret: GIT_USERNAME
       api_key:
         from_secret: GIT_TOKEN
-
+      pubilc_url:
+        from_secret: https://api.github.com/Lediya/SampleTest/app/
+      build: 1.0
       files: dist/*
       tags:
         - "latest"
@@ -40,7 +42,7 @@ steps:
         - GRADLE_USER_HOME=.gradleHome
       commands:
         - ./gradlew release
-        - curl -u $GIT_USERNAME:$GIT_TOKEN -X PUT $0.1.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
+        - curl -u username:api_key -X PUT  pubilc_url/build.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
       when:
         event: tag
         status: success
