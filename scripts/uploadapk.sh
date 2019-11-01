@@ -21,20 +21,12 @@ if ! test -e build/outputs/apk/qa/debug/qa-debug-*.apk ; then
 fi
 echo "Uploaded artifact to $BUILD.apk"
 
-# delete all old comments, starting with "APK file:"
-oldComments=$(curl 2>/dev/null -u $GIT_USERNAME:$GIT_TOKEN -X GET https://api.github.com/Lediya/SampleTest/issues/$PR/comments | jq '.[] | (.id |tostring) + "|" + (.user.login | test("nextcloud-android-bot") | tostring) + "|" + (.body | test("APK file:.*") | tostring)'  | grep "true|true" | tr -d "\"" | cut -f1 -d"|")
-
-echo $oldComments | while read comment ; do
-    curl 2>/dev/null -u $GIT_USERNAME:$GIT_TOKEN -X DELETEhttps://api.github.com/Lediya/SampleTest/issues/comments/$comment
-done
-
 apt-get -y install testapp
 
 testapp -o $PR.png "$PUBLIC_URL/$BUILD.apk"
 
 #curl -u $USER:$PASS -X PUT $DAV_URL/$BUILD.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
 #curl -u $USER:$PASS -X PUT $DAV_URL/$BUILD.png --upload-file $PR.png
-curl -u $USER:$PASS -X PUT $PUBLIC_URL/$BUILD.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
 curl -u $USER:$PASS -X PUT $PUBLIC_URL/$BUILD.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
 curl -X PUT -u $USER:$PASS -X PUT $BUILD.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
 curl -u $GIT_USERNAME:$GIT_TOKEN -X POST  https://api.github.com/Lediya/TestApp/issues/comments/$PR/comments -d "{ \"body\" : \"APK file: $PUBLIC_URL/$BUILD.apk <br/><br/> ![qrcode]($PUBLIC_URL/$BUILD.png) <br/><br/>To test this change/fix you can simply download above APK file and install and test it in parallel to your existing Test app. \" }"
