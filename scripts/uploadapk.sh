@@ -15,10 +15,6 @@ if ! test -e build/outputs/apk/qa/debug/qa-debug-*.apk ; then
 fi
 echo "Uploaded artifact to $BUILD.apk"
 
-apt-get -y install testapp
-
-testapp -o $PR.png "$PUBLIC_URL/$BUILD.apk"
-
 #curl -u $USER:$PASS -X PUT $DAV_URL/$BUILD.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
 #curl -u $USER:$PASS -X PUT $DAV_URL/$BUILD.png --upload-file $PR.png
 curl -u $USER:$PASS -X PUT $PUBLIC_URL/$BUILD.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
