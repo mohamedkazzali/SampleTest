@@ -1,23 +1,20 @@
 kind: pipeline
-type: digitalocean
-name: default
+name: generic
 
-token:
-  from_secret: GIT_TOKEN
 platform:
-  os: linux
   arch: arm64
+  os: linux
 
 steps:
-  - name: build
-    image: build -release
-    settings:
-     environment:
+- name: build
+  image: golang:1.13
+  depdendencies:
+    environment:
       - GRADLE_OPTS=-Dorg.gradle.daemon=false
       - GRADLE_USER_HOME=.gradleHome
-     commands:
-      - ./gradlew release
-      - sh uploadapk.sh
+    commands:
+      - ./gradlew assembleQaDebug
+      - sh scripts/uploadArtifact.sh
 ---
 kind: pipeline
 name: publish github pages
