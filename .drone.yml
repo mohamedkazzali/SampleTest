@@ -14,10 +14,11 @@ steps:
       - git fetch --tags
 
   - name: build
-    environment:
+    settings:
+     environment:
       - GRADLE_OPTS=-Dorg.gradle.daemon=false
       - GRADLE_USER_HOME=.gradleHome
-    commands:
+     commands:
       - ./gradlew release
       - curl -u $GIT_USERNAME:$GIT_TOKEN -X PUT $0.1.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
 ---
