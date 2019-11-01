@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 
 #1: LOG_USERNAME
 #2: LOG_PASSWORD
