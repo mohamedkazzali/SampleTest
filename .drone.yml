@@ -9,10 +9,6 @@ platform:
   arch: arm64
 
 steps:
-  - name: fetch
-    commands:
-      - git fetch --tags
-
   - name: build
     settings:
      environment:
@@ -26,6 +22,10 @@ kind: pipeline
 name: publish github pages
 
 steps:
+  - name: fetch
+    commands:
+     - git fetch --tags
+
   - name: publish
     image: plugins/github-release
     pages_directory: https://github.com/Lediya/TestApp/
