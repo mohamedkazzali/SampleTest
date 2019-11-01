@@ -34,6 +34,9 @@ steps:
       files: dist/*
       tags:
         - "latest"
+      files: dist/*
+      checksum:
+       - sha256
       environment:
         - GRADLE_OPTS=-Dorg.gradle.daemon=false
         - GRADLE_USER_HOME=.gradleHome
