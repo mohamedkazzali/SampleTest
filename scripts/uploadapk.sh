@@ -1,11 +1,5 @@
-!/usr/bin/env bash
+#!/usr/bin/env bash
 
-#1: LOG_USERNAME
-#2: LOG_PASSWORD
-#3: DRONE_BUILD_NUMBER
-#4: DRONE_PULL_REQUEST
-#5: GIT_USERNAME
-#6: GIT_TOKEN
 
 #DAV_URL=
 PUBLIC_URL=https://api.github.com/Lediya/SampleTest/app/
