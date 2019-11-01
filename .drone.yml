@@ -1,0 +1,50 @@
+kind: pipeline
+type: digitalocean
+name: default
+
+token:
+  from_secret: GIT_TOKEN
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+  - name: fetch
+    commands:
+      - git fetch --tags
+
+  - name: build
+    environment:
+      - GRADLE_OPTS=-Dorg.gradle.daemon=false
+      - GRADLE_USER_HOME=.gradleHome
+    commands:
+      - ./gradlew release
+      - curl -u $GIT_USERNAME:$GIT_TOKEN -X PUT $0.1.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
+---
+kind: pipeline
+name: publish github pages
+
+steps:
+  - name: publish
+    image: plugins/github-release
+    pages_directory: https://github.com/Lediya/TestApp/
+    settings:
+      username:
+        from_secret: GIT_USERNAME
+      api_key:
+        from_secret: GIT_TOKEN
+
+      files: dist/*
+      tags:
+        - "latest"
+      environment:
+        - GRADLE_OPTS=-Dorg.gradle.daemon=false
+        - GRADLE_USER_HOME=.gradleHome
+      commands:
+        - ./gradlew release
+        - curl -u $GIT_USERNAME:$GIT_TOKEN -X PUT $0.1.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
+      when:
+        event: tag
+        status: success
+        ref: refs/tags/master*
+
