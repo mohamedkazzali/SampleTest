@@ -1,5 +1,4 @@
 kind: pipeline
-type: digitalocean
 name: default
 
 token:
