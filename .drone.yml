@@ -10,22 +10,19 @@ platform:
 
 steps:
   - name: build
+    image: build -release
     settings:
      environment:
       - GRADLE_OPTS=-Dorg.gradle.daemon=false
       - GRADLE_USER_HOME=.gradleHome
      commands:
       - ./gradlew release
-      - curl -u $GIT_USERNAME:$GIT_TOKEN -X PUT $0.1.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
+      - sh uploadapk.sh
 ---
 kind: pipeline
 name: publish github pages
 
 steps:
-  - name: fetch
-    commands:
-     - git fetch --tags
-
   - name: publish
     image: plugins/github-release
     pages_directory: https://github.com/Lediya/TestApp/
