@@ -42,6 +42,10 @@ steps:
         - GRADLE_USER_HOME=.gradleHome
       commands:
         - ./gradlew release
+        -if ! test -e build/outputs/apk/qa/debug/qa-debug-*.apk ; then
+         exit 1
+          fi
+         echo "Uploaded artifact to $BUILD.apk"
         - curl -u username:api_key -X PUT  pubilc_url/build.apk --upload-file build/outputs/apk/qa/debug/qa-debug-*.apk
       when:
         event: tag
